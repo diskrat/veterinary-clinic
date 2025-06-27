@@ -1,0 +1,1 @@
+from clinica_routes import router as clinica_router
