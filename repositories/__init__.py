@@ -1,1 +1,1 @@
-from .clinica import ClinicaRepository
+from .clinica import Clinica
