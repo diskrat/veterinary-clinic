@@ -5,6 +5,6 @@ from api import clinica_routes
 
 base.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(docs_url="/docs", redoc_url="/redoc")
 
 app.include_router(clinica_routes.router)
