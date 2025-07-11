@@ -1,7 +1,5 @@
 from logging.config import fileConfig
 import os
-from dotenv import load_dotenv
-
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -12,14 +10,22 @@ from models.base import Base
 # access to the values within the .ini file in use.
 config = context.config
 
+from dotenv import load_dotenv
+
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 load_dotenv()
-db_url = os.getenv("DATABASE_URL")
-if db_url:
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST","localhost")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+
+db_url = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+if all([POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB]):
     config.set_main_option("sqlalchemy.url", db_url)
 
 # add your model's MetaData object here

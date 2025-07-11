@@ -1,15 +1,19 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
-from .base import Base
+from sqlalchemy.orm import Session
+from models import Veterinario
 
-class Veterinario(Base):
-    __tablename__ = 'veterinarios'
+class VeterinarioRepository:
+    def __init__(self, db: Session):
+        self.db = db
 
-    id = Column(Integer, primary_key=True)
-    nome = Column(String, nullable=False)
-    especialidade = Column(String, nullable=False)
+    def list_by_clinica(self, clinica_id: int) -> list[Veterinario]:
+        return self.db.query(Veterinario).filter(Veterinario.clinica_id == clinica_id).all()
 
-    clinica_id = Column(Integer, ForeignKey('clinicas.id'), nullable=False)
-    clinica = relationship('Clinica', back_populates='veterinarios')
+    def create(self, veterinario: Veterinario) -> Veterinario:
+        self.db.add(veterinario)
+        self.db.commit()
+        self.db.refresh(veterinario)
+        return veterinario
 
-    atendimentos = relationship('Atendimento', back_populates='veterinario')
+    def list_all(self) -> list[Veterinario]:
+        return self.db.query(Veterinario).all()
+

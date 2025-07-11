@@ -1,1 +1,5 @@
 from .clinica_repository import ClinicaRepository
+from .veterinario_repositories import VeterinarioRepository
+from .tutor_repositories import TutorRepository
+from .pet_repositories import PetRepository
+from .atendimento_repositories import AtendimentoRepository
